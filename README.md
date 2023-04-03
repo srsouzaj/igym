@@ -15,6 +15,7 @@ Para aprofundar ainda mais meus conhecimentos sendo alinhado com as novas e melh
 - [Expo](https://expo.dev/)
 - [Typescript](https://www.typescriptlang.org/)
 - [ReactJS](https://pt-br.reactjs.org/)
+- [NativeBase](https://nativebase.io/)
 - [expo-google-fonts/roboto](https://www.npmjs.com/package/@expo-google-fonts/roboto)
 
 ## **🔖 Layout**
