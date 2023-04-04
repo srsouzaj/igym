@@ -19,7 +19,7 @@ export function HomeHeader() {
                     Olá,
                 </Text>
                 <Heading color="gray.100" fontSize="md">
-                    Rodrigo
+                    Jorge
                 </Heading>
             </VStack>
 
