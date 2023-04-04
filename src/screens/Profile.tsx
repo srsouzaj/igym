@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import { TouchableOpacity } from 'react-native';
-import { Center, ScrollView, VStack, Skeleton, Text, Heading } from 'native-base';
+import { Center, ScrollView, VStack, Skeleton, Text, Heading, useTheme } from 'native-base';
 
 import { ScreenHeader } from '@components/ScreenHeader';
 import { UserPhoto } from '@components/UserPhoto';
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
-
 
 const PHOTO_SIZE = 33;
 
@@ -15,7 +14,8 @@ export function Profile() {
     return (
         <VStack flex={1}>
             <ScreenHeader title='Perfil' />
-            <ScrollView>
+
+            <ScrollView contentContainerStyle={{ paddingBottom: 36 }}>
                 <Center mt={6} px={10}>
                     {
                         photoIsLoading ?
@@ -28,7 +28,7 @@ export function Profile() {
                             />
                             :
                             <UserPhoto
-                                source={{ uri: 'https://github.com/srsouzaj.png' }}
+                                source={{ uri: 'https://github.com/rodrigorgtic.png' }}
                                 alt="Foto do usuário"
                                 size={PHOTO_SIZE}
                             />
@@ -48,10 +48,8 @@ export function Profile() {
                         placeholder="E-mail"
                         isDisabled
                     />
-                </Center>
 
-                <VStack px={10} mt={12} mb={9}>
-                    <Heading color="gray.200" fontSize="md" mb={2}>
+                    <Heading color="gray.200" fontSize="md" mb={2} alignSelf="flex-start" mt={12}>
                         Alterar senha
                     </Heading>
 
@@ -60,13 +58,11 @@ export function Profile() {
                         placeholder="Senha antiga"
                         secureTextEntry
                     />
-
                     <Input
                         bg="gray.600"
                         placeholder="Nova senha"
                         secureTextEntry
                     />
-
                     <Input
                         bg="gray.600"
                         placeholder="Confirme a nova senha"
@@ -74,7 +70,7 @@ export function Profile() {
                     />
 
                     <Button title="Atualizar" mt={4} />
-                </VStack>
+                </Center>
             </ScrollView>
         </VStack>
     );
