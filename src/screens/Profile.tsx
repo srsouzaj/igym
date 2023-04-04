@@ -13,6 +13,7 @@ const PHOTO_SIZE = 33;
 export function Profile() {
 
     const [photoIsLoading, setPhotoIsLoading] = useState(false);
+    const [userPhoto, setUserPhoto] = useState('https://github.com/srsouzaj.png');
 
     async function handleUserPhotoSelected() {
         const photoSelected = await ImagePicker.launchImageLibraryAsync({
@@ -26,8 +27,10 @@ export function Profile() {
             return;
         }
 
-        console.log(photoSelected)
+        setUserPhoto(photoSelected.uri);
     }
+
+
     return (
         <VStack flex={1}>
             <ScreenHeader title='Perfil' />
@@ -44,7 +47,7 @@ export function Profile() {
                             />
                             :
                             <UserPhoto
-                                source={{ uri: 'https://github.com/srsouzaj.png' }}
+                                source={{ uri: userPhoto }}
                                 alt="Foto do usuário"
                                 size={PHOTO_SIZE}
                             />
