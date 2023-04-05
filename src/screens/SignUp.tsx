@@ -1,48 +1,51 @@
-import { useNavigation } from "@react-navigation/native";
+import { Alert } from 'react-native';
+import axios from 'axios';
 import { VStack, Image, Text, Center, Heading, ScrollView } from "native-base";
+import { useNavigation } from "@react-navigation/native";
+
 import { useForm, Controller } from 'react-hook-form';
-import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+
 import LogoSvg from '@assets/logo.svg';
 import BackgroundImg from '@assets/background.png';
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
 import { api } from "@services/api";
 
-
-type FormDataProps = {
-    name: string;
-    email: string;
-    password: string;
-    password_confirm: string;
-}
-
-const signUpSchema = yup.object({
-    name: yup.string().required('Informe o nome.'),
-    email: yup.string().required('Informe o e-mail').email('E-mail inválido.'),
-    password: yup.string().required('Informe a senha').min(6, 'A senha deve ter pelo menos 6 dígitos.'),
-    password_confirm: yup.string().required('Confirme a senha.').oneOf([yup.ref('password'), null], 'A confirmação da senha não confere')
-});
+import { signUpSchema } from "@models/schemas/signUp.schema";
+import { FormDataInterface } from "@models/interface/signup.interface";
 
 export function SignUp() {
 
-    const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
-        resolver: yupResolver(signUpSchema),
-    });
+    const { control, handleSubmit, formState: { errors } } =
+        useForm<FormDataInterface>({
+            resolver: yupResolver(signUpSchema),
+        });
 
     const navigation = useNavigation();
     function handleGoBack() {
         navigation.goBack();
     }
 
-    async function handleSignUp({ name, email, password }: FormDataProps) {
+    async function handleSignUp({ name, email, password }: FormDataInterface) {
+        try {
+            const response = await api
+                .post('/users', { name, email, password });
+            console.log(response.data);
 
-        const response = await api.post('/users', { name, email, password });
-        console.log(response.data);
+        } catch (error) {
+
+            if (axios.isAxiosError(error)) {
+                Alert.alert(error.response?.data.message);
+            }
+        }
     }
 
     return (
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+        <ScrollView
+            contentContainerStyle={{ flexGrow: 1 }}
+            showsVerticalScrollIndicator={false}>
+
             <VStack flex={1} px={10} pb={16}>
                 <Image
                     source={BackgroundImg}
@@ -51,12 +54,14 @@ export function SignUp() {
                     resizeMode="contain"
                     position="absolute"
                 />
+
                 <Center my={24}>
                     <LogoSvg />
                     <Text color="gray.100" fontSize="sm">
                         Treine sua mente e o seu corpo.
                     </Text>
                 </Center>
+
                 <Center>
                     <Heading color="gray.100" fontSize="xl" mb={6} fontFamily="heading">
                         Crie sua conta

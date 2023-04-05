@@ -28,6 +28,9 @@
       "@hooks/*": [
         "./src/hooks/*"
       ],
+      "@models/*": [
+        "./src/models/*"
+      ],
       "@contexts/*": [
         "./src/contexts/*"
       ],
