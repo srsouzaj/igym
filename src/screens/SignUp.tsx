@@ -7,12 +7,14 @@ import LogoSvg from '@assets/logo.svg';
 import BackgroundImg from '@assets/background.png';
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
+
 type FormDataProps = {
     name: string;
     email: string;
     password: string;
     password_confirm: string;
 }
+
 const signUpSchema = yup.object({
     name: yup.string().required('Informe o nome.'),
     email: yup.string().required('Informe o e-mail').email('E-mail inválido.'),
