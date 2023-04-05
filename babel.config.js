@@ -20,7 +20,8 @@ module.exports = function (api) {
             '@routes': './src/routes',
             "@services": "./src/services",
             "@models": "./src/models",
-            "@DTO": "./scr/dtos"
+            "@DTO": "./src/dtos",
+            "@storage": "./src/storage"
           }
         },
       ],
