@@ -15,10 +15,14 @@ import { Input } from "@components/Input";
 import { Button } from "@components/Button";
 import { FormDataInterface } from '@models/interface/signup.interface';
 import { signUpSchema } from '@models/schemas/signUp.schema';
+import { useState } from "react";
+import { useAuth } from "@hooks/useAuth";
 
 
 export function SignUp() {
+    const [isLoading, setIsLoading] = useState(false);
     const toast = useToast();
+    const { singIn } = useAuth();
 
     const { control, handleSubmit, formState: { errors } } =
         useForm<FormDataInterface>({
@@ -31,12 +35,17 @@ export function SignUp() {
     }
 
     async function handleSignUp({ name, email, password }: FormDataInterface) {
+
         try {
-            const response = await api
+            setIsLoading(true)
+
+            await api
                 .post('/users', { name, email, password });
-            console.log(response.data);
+            await singIn(email, password)
+
         } catch (error) {
             const isAppError = error instanceof AppError;
+            setIsLoading(false);
             const title = isAppError ?
                 error.message : 'Não foi possível criar a conta. Tente novamente mais tarde';
             toast.show({
@@ -127,6 +136,7 @@ export function SignUp() {
                     <Button
                         title="Criar e acessar"
                         onPress={handleSubmit(handleSignUp)}
+                        isLoading={isLoading}
                     />
                 </Center>
 
