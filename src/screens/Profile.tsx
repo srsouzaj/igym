@@ -28,9 +28,15 @@ export function Profile() {
                 allowsEditing: true,
             });
 
+
+            //para a nova versão, adicionar
+            //if(photoSelected.canceled){
             if (photoSelected.cancelled) {
                 return;
             }
+
+            //para a nova versão, adicionar
+            //if(photoSelected.assets[0].uri){            
             if (photoSelected.uri) {
 
                 const photoInfo = await FileSystem.getInfoAsync(photoSelected.uri);
