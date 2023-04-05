@@ -19,7 +19,8 @@ module.exports = function (api) {
             '@contexts': './src/contexts',
             '@routes': './src/routes',
             "@services": "./src/services",
-            "@models": "./src/models"
+            "@models": "./src/models",
+            "@DTO": "./scr/dtos"
           }
         },
       ],
