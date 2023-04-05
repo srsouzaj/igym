@@ -25,9 +25,11 @@ export function SignUp() {
             resolver: yupResolver(signUpSchema),
         });
     const navigation = useNavigation();
+
     function handleGoBack() {
         navigation.goBack();
     }
+
     async function handleSignUp({ name, email, password }: FormDataInterface) {
         try {
             const response = await api
