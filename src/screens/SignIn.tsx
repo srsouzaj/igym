@@ -3,6 +3,8 @@ import { useNavigation } from "@react-navigation/native";
 import { VStack, Image, Text, Center, Heading, ScrollView } from "native-base";
 
 import { AuthNavigatorRoutesProps } from '@routes/auth.routes';
+import { useAuth } from '@hooks/useAuth';
+
 import LogoSvg from '@assets/logo.svg';
 import BackgroundImg from '@assets/background.png';
 import { Input } from "@components/Input";
@@ -14,17 +16,17 @@ type FormData = {
 }
 
 export function SignIn() {
+    const { singIn } = useAuth();
 
     const navigation = useNavigation<AuthNavigatorRoutesProps>();
 
     const { control, handleSubmit, formState: { errors } } = useForm<FormData>()
-
     function handleNewAccount() {
         navigation.navigate('signUp');
     }
 
     function handleSignIn({ email, password }: FormData) {
-        console.log(email, password)
+        singIn(email, password);
     }
 
     return (
@@ -47,7 +49,6 @@ export function SignIn() {
                     <Heading color="gray.100" fontSize="xl" mb={6} fontFamily="heading">
                         Acesse a conta
                     </Heading>
-
                     <Controller
                         control={control}
                         name="email"
@@ -76,10 +77,8 @@ export function SignIn() {
                             />
                         )}
                     />
-
                     <Button title="Acessar" onPress={handleSubmit(handleSignIn)} />
                 </Center>
-
                 <Center mt={24}>
                     <Text color="gray.100" fontSize="sm" mb={3} fontFamily="body">
                         Ainda não tem acesso?
