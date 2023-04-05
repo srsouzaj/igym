@@ -27,13 +27,25 @@ export function SignUp() {
     const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
         resolver: yupResolver(signUpSchema),
     });
+
     const navigation = useNavigation();
     function handleGoBack() {
         navigation.goBack();
     }
-    function handleSignUp({ name, email, password, password_confirm }: FormDataProps) {
-        console.log({ name, email, password, password_confirm })
+
+    function handleSignUp({ name, email, password }: FormDataProps) {
+        console.log("data", { name, email, password })
+
+        fetch('http://192.168.1.101:3333/users', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name, email, password })
+        });
     }
+
     return (
         <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
             <VStack flex={1} px={10} pb={16}>
