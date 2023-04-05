@@ -1,11 +1,13 @@
 import { useNavigation } from "@react-navigation/native";
 import { VStack, Image, Text, Center, Heading, ScrollView } from "native-base";
 import { useForm, Controller } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+
 import LogoSvg from '@assets/logo.svg';
 import BackgroundImg from '@assets/background.png';
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
-
 type FormDataProps = {
     name: string;
     email: string;
@@ -13,23 +15,27 @@ type FormDataProps = {
     password_confirm: string;
 }
 
+const signUpSchema = yup.object({
+    name: yup.string().required('Informe o nome'),
+    email: yup.string().required('Informe o e-mail').email('E-mail inválido')
+});
+
 export function SignUp() {
 
-    const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>();
+    const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
+        resolver: yupResolver(signUpSchema),
+    });
+
     const navigation = useNavigation();
 
     function handleGoBack() {
         navigation.goBack();
     }
-
     function handleSignUp({ name, email, password, password_confirm }: FormDataProps) {
         console.log({ name, email, password, password_confirm })
     }
-
     return (
-        <ScrollView
-            contentContainerStyle={{ flexGrow: 1 }}
-            showsVerticalScrollIndicator={false}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
             <VStack flex={1} px={10} pb={16}>
                 <Image
                     source={BackgroundImg}
@@ -40,42 +46,29 @@ export function SignUp() {
                 />
                 <Center my={24}>
                     <LogoSvg />
-
                     <Text color="gray.100" fontSize="sm">
                         Treine sua mente e o seu corpo.
                     </Text>
                 </Center>
-
                 <Center>
-
                     <Heading color="gray.100" fontSize="xl" mb={6} fontFamily="heading">
                         Crie sua conta
                     </Heading>
                     <Controller
                         control={control}
                         name="name"
-                        rules={{
-                            required: 'Informe o nome.'
-                        }}
                         render={({ field: { onChange, value } }) => (
                             <Input
                                 placeholder="Nome"
                                 onChangeText={onChange}
                                 value={value}
+                                errorMessage={errors.name?.message}
                             />
                         )}
                     />
-                    <Text color="white">{errors.name?.message}</Text>
                     <Controller
                         control={control}
                         name="email"
-                        rules={{
-                            required: 'Informe o email.',
-                            pattern: {
-                                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                message: 'E-mail inválido'
-                            }
-                        }}
                         render={({ field: { onChange, value } }) => (
                             <Input
                                 placeholder="E-mail"
@@ -83,11 +76,10 @@ export function SignUp() {
                                 autoCapitalize="none"
                                 onChangeText={onChange}
                                 value={value}
+                                errorMessage={errors.email?.message}
                             />
                         )}
                     />
-
-                    <Text color="white">{errors.email?.message}</Text>
 
                     <Controller
                         control={control}
