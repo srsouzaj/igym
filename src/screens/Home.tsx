@@ -7,20 +7,22 @@ import { ExerciseDTO } from '@dtos/ExerciseDTO';
 import { Group } from '@components/Group';
 import { HomeHeader } from '@components/HomeHeader';
 import { ExerciseCard } from '@components/ExerciseCard';
-import { AppNavigatorRoutesProps } from '@routes/app.routes';
 
+import { AppNavigatorRoutesProps } from '@routes/app.routes';
+import { Loading } from '@components/Loading';
 
 export function Home() {
+    const [isLoading, setIsLoading] = useState(true);
+
     const [groups, setGroups] = useState<string[]>([]);
     const [exercises, setExercises] = useState<ExerciseDTO[]>([]);
-    const [groupSelected, setGroupSelected] = useState('Costas');
+    const [groupSelected, setGroupSelected] = useState('bíceps');
+
     const toast = useToast();
     const navigation = useNavigation<AppNavigatorRoutesProps>();
-
     function handleOpenExerciseDetails() {
         navigation.navigate('exercise');
     }
-
     async function fetchGroups() {
         try {
             const response = await api.get('/groups');
@@ -38,8 +40,11 @@ export function Home() {
 
     async function fecthExercisesByGroup() {
         try {
+            setIsLoading(true);
             const response = await api.get(`/exercises/bygroup/${groupSelected}`);
+
             setExercises(response.data);
+
         } catch (error) {
             const isAppError = error instanceof AppError;
             const title = isAppError ? error.message : 'Não foi possível carregar os exercícios';
@@ -48,19 +53,19 @@ export function Home() {
                 placement: 'top',
                 bgColor: 'red.500'
             })
+        } finally {
+            setIsLoading(false);
         }
     }
 
     useEffect(() => {
         fetchGroups();
     }, [])
-
     useFocusEffect(
         useCallback(() => {
             fecthExercisesByGroup()
         }, [groupSelected])
     )
-
     return (
         <VStack flex={1}>
             <HomeHeader />
@@ -82,30 +87,37 @@ export function Home() {
                 my={10}
                 maxH={10}
             />
-            <VStack px={8}>
-                <HStack justifyContent="space-between" mb={5}>
-                    <Heading color="gray.200" fontSize="md" fontFamily="heading">
-                        Exercícios
-                    </Heading>
-                    <Text color="gray.200" fontSize="sm">
-                        {exercises.length}
-                    </Text>
-                </HStack>
-                <FlatList
-                    data={exercises}
-                    keyExtractor={item => item.id}
-                    renderItem={({ item }) => (
-                        <ExerciseCard
-                            onPress={handleOpenExerciseDetails}
-                            data={item}
+
+            {
+                isLoading ? <Loading /> :
+                    <VStack px={8}>
+                        <HStack justifyContent="space-between" mb={5}>
+                            <Heading color="gray.200" fontSize="md" fontFamily="heading">
+                                Exercícios
+                            </Heading>
+
+                            <Text color="gray.200" fontSize="sm">
+                                {exercises.length}
+                            </Text>
+                        </HStack>
+
+                        <FlatList
+                            data={exercises}
+                            keyExtractor={item => item.id}
+                            renderItem={({ item }) => (
+                                <ExerciseCard
+                                    onPress={handleOpenExerciseDetails}
+                                    data={item}
+                                />
+                            )}
+                            showsVerticalScrollIndicator={false}
+                            _contentContainerStyle={{
+                                paddingBottom: 20
+                            }}
                         />
-                    )}
-                    showsVerticalScrollIndicator={false}
-                    _contentContainerStyle={{
-                        paddingBottom: 20
-                    }}
-                />
-            </VStack>
+
+                    </VStack>
+            }
         </VStack>
     );
 }
