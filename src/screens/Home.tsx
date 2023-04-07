@@ -3,7 +3,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { FlatList, Heading, HStack, Text, useToast, VStack } from 'native-base';
 import { api } from '@services/api';
 import { AppError } from '@utils/AppError';
-import { ExerciseDTO } from '@dtos/ExerciseDTO';
+import { ExerciseDTO } from '@models/dtos/ExerciseDTO';
 import { Group } from '@components/Group';
 import { HomeHeader } from '@components/HomeHeader';
 import { ExerciseCard } from '@components/ExerciseCard';

@@ -5,7 +5,7 @@ import { Entypo } from '@expo/vector-icons';
 
 import { api } from '@services/api';
 
-import { ExerciseDTO } from '@dtos/ExerciseDTO';
+import { ExerciseDTO } from '@models/dtos/ExerciseDTO';
 
 type Props = TouchableOpacityProps & {
     data: ExerciseDTO;
