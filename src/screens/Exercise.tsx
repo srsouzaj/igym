@@ -10,23 +10,22 @@ import { ExerciseDTO } from '@dtos/ExerciseDTO';
 import BodySvg from '@assets/body.svg';
 import SeriesSvg from '@assets/series.svg';
 import RepetitionsSvg from '@assets/repetitions.svg';
-
 import { Button } from '@components/Button';
 import { Loading } from '@components/Loading';
-
 
 type RouteParamsProps = {
     exerciseId: string;
 }
 
 export function Exercise() {
+    const [sendingRegister, setSendingRegister] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [exercise, setExercise] = useState<ExerciseDTO>({} as ExerciseDTO);
     const navigation = useNavigation<AppNavigatorRoutesProps>();
-
     const route = useRoute();
     const toast = useToast();
     const { exerciseId } = route.params as RouteParamsProps;
+
     function handleGoBack() {
         navigation.goBack();
     }
@@ -35,7 +34,6 @@ export function Exercise() {
         try {
             setIsLoading(true);
             const response = await api.get(`/exercises/${exerciseId}`);
-
             setExercise(response.data);
         } catch (error) {
             const isAppError = error instanceof AppError;
@@ -50,9 +48,38 @@ export function Exercise() {
         }
     }
 
+    async function handleExerciseHistoryRegister() {
+        try {
+            setSendingRegister(true);
+
+            await api.post('/history', { exercise_id: exerciseId });
+
+            toast.show({
+                title: 'Parabéns! Exercício registrado no seu histórico.',
+                placement: 'top',
+                bgColor: 'green.500'
+            });
+
+            navigation.navigate('history');
+        } catch (error) {
+            const isAppError = error instanceof AppError;
+            const title = isAppError ? error.message : 'Não foi possível registrar exercício.';
+
+            toast.show({
+                title,
+                placement: 'top',
+                bgColor: 'red.500'
+            })
+        } finally {
+            setSendingRegister(false);
+        }
+    }
+
     useEffect(() => {
         fetchExerciseDetails();
     }, [exerciseId])
+
+
     return (
         <VStack flex={1}>
             <VStack px={8} bg="gray.600" pt={12}>
@@ -76,7 +103,6 @@ export function Exercise() {
                     </HStack>
                 </HStack>
             </VStack>
-
             {isLoading ? <Loading /> :
                 <VStack p={8}>
                     <Box rounded="lg" mb={3} overflow="hidden">
@@ -89,17 +115,14 @@ export function Exercise() {
                             rounded="lg"
                         />
                     </Box>
-
                     <Box bg="gray.600" rounded="md" pb={4} px={4}>
                         <HStack alignItems="center" justifyContent="space-around" mb={6} mt={5}>
                             <HStack>
                                 <SeriesSvg />
-
                                 <Text color="gray.200" ml="2">
                                     {exercise.series} séries
                                 </Text>
                             </HStack>
-
                             <HStack>
                                 <RepetitionsSvg />
 
@@ -111,6 +134,8 @@ export function Exercise() {
 
                         <Button
                             title="Marcar como realizado"
+                            isLoading={sendingRegister}
+                            onPress={handleExerciseHistoryRegister}
                         />
                     </Box>
                 </VStack>
