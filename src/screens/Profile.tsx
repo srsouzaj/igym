@@ -2,9 +2,13 @@ import { useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { Center, ScrollView, VStack, Skeleton, Text, Heading, useToast } from 'native-base';
 import { Controller, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
+import * as yup from 'yup';
+
 import { useAuth } from '@hooks/useAuth';
+
 import { ScreenHeader } from '@components/ScreenHeader';
 import { UserPhoto } from '@components/UserPhoto';
 import { Input } from '@components/Input';
@@ -20,18 +24,26 @@ type FormDataProps = {
     confirm_password: string;
 }
 
+const profileSchema = yup.object({
+    name: yup.string().required('Informe o nome'),
+
+})
+
 export function Profile() {
+
     const [photoIsLoading, setPhotoIsLoading] = useState(false);
-    const [userPhoto, setUserPhoto] = useState('https://github.com/srsouzaj.png');
+    const [userPhoto, setUserPhoto] = useState('https://github.com/rodrigorgtic.png');
 
     const toast = useToast();
     const { user } = useAuth();
-    const { control, handleSubmit } = useForm<FormDataProps>({
+    const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
         defaultValues: {
             name: user.name,
             email: user.email
-        }
+        },
+        resolver: yupResolver(profileSchema)
     });
+
     async function handleUserPhotoSelected() {
         setPhotoIsLoading(true);
 
@@ -66,7 +78,6 @@ export function Profile() {
             setPhotoIsLoading(false)
         }
     }
-
     async function handleProfileUpdate(data: FormDataProps) {
         console.log(data);
     }
@@ -107,6 +118,7 @@ export function Profile() {
                                 placeholder='Nome'
                                 onChangeText={onChange}
                                 value={value}
+                                errorMessage={errors.name?.message}
                             />
                         )}
                     />
@@ -128,7 +140,6 @@ export function Profile() {
                     <Heading color="gray.200" fontSize="md" mb={2} alignSelf="flex-start" mt={12} fontFamily="heading">
                         Alterar senha
                     </Heading>
-
                     <Controller
                         control={control}
                         name="old_password"
@@ -141,7 +152,6 @@ export function Profile() {
                             />
                         )}
                     />
-
                     <Controller
                         control={control}
                         name="password"
@@ -151,10 +161,10 @@ export function Profile() {
                                 placeholder="Nova senha"
                                 secureTextEntry
                                 onChangeText={onChange}
+                                errorMessage={errors.password?.message}
                             />
                         )}
                     />
-
                     <Controller
                         control={control}
                         name="confirm_password"
@@ -164,10 +174,10 @@ export function Profile() {
                                 placeholder="Confirme a nova senha"
                                 secureTextEntry
                                 onChangeText={onChange}
+                                errorMessage={errors.confirm_password?.message}
                             />
                         )}
                     />
-
                     <Button
                         title="Atualizar"
                         mt={4}
