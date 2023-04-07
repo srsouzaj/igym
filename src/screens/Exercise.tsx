@@ -1,7 +1,7 @@
 import { TouchableOpacity } from 'react-native';
 import { Box, Heading, HStack, Icon, Image, Text, VStack } from 'native-base';
 import { Feather } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
 
@@ -10,14 +10,21 @@ import SeriesSvg from '@assets/series.svg';
 import RepetitionsSvg from '@assets/repetitions.svg';
 import { Button } from '@components/Button';
 
+type RouteParamsProps = {
+    exerciseId: string;
+}
+
 export function Exercise() {
 
     const navigation = useNavigation<AppNavigatorRoutesProps>();
 
+    const route = useRoute();
+
+    const { exerciseId } = route.params as RouteParamsProps;
+
     function handleGoBack() {
         navigation.goBack();
     }
-
     return (
         <VStack flex={1}>
             <VStack px={8} bg="gray.600" pt={12}>
@@ -30,7 +37,7 @@ export function Exercise() {
                     />
                 </TouchableOpacity>
                 <HStack justifyContent="space-between" mt={4} mb={8} alignItems="center">
-                    <Heading color="gray.100" fontSize="lg" flexShrink={1}>
+                    <Heading color="gray.100" fontSize="lg" flexShrink={1} fontFamily="heading">
                         Puxada frontal
                     </Heading>
                     <HStack alignItems="center">
@@ -51,7 +58,6 @@ export function Exercise() {
                     resizeMode="cover"
                     rounded="lg"
                 />
-
                 <Box bg="gray.600" rounded="md" pb={4} px={4}>
                     <HStack alignItems="center" justifyContent="space-around" mb={6} mt={5}>
                         <HStack>
@@ -60,15 +66,14 @@ export function Exercise() {
                                 3 séries
                             </Text>
                         </HStack>
-
                         <HStack>
                             <RepetitionsSvg />
+
                             <Text color="gray.200" ml="2">
                                 12 repetições
                             </Text>
                         </HStack>
                     </HStack>
-
                     <Button
                         title="Marcar como realizado"
                     />
