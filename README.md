@@ -2,7 +2,7 @@
   <img alt="Ignite Gym" src=".github/logo.png" />
 </p>
 
-## **💻** Projeto - 🚧 em construção 
+## **💻** Projeto
 
 Para aprofundar ainda mais meus conhecimentos sendo alinhado com as novas e melhores práticas e tecnologias disponíveis no mundo da tecnologia, desenvolvi a aplicação mobile “Ignite Gym” durante o programa de aceleração “Ignite - React Native”, onde contruímos um sistema de gerenciamento de exercícios. Foi utilizado como estilização o Native Base.
 
