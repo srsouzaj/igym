@@ -4,7 +4,7 @@
 
 ## **💻** Projeto
 
-Para aprofundar ainda mais meus conhecimentos sendo alinhado com as novas e melhores práticas e tecnologias disponíveis no mundo da tecnologia, desenvolvi a aplicação mobile “Ignite Gym” durante o programa de aceleração “Ignite - React Native”, onde contruímos um sistema de gerenciamento de exercícios. Foi utilizado como estilização o Native Base.
+Para aprofundar ainda mais meus conhecimentos sendo alinhado com as novas e melhores práticas e tecnologias disponíveis no mundo da tecnologia, desenvolvi a aplicação mobile “Ignite Gym” durante o programa de aceleração “Ignite - React Native”, onde contruímos um sistema de gerenciamento de exercícios, consumindo uma API. Foi utilizado como estilização o Native Base.
 
 <p align="center">
   <img alt="Background do Ignite Gym" src=".github/background.png" />
@@ -17,6 +17,10 @@ Para aprofundar ainda mais meus conhecimentos sendo alinhado com as novas e melh
 - [ReactJS](https://pt-br.reactjs.org/)
 - [NativeBase](https://nativebase.io/)
 - [expo-google-fonts/roboto](https://www.npmjs.com/package/@expo-google-fonts/roboto)
+- [Axios](https://axios-http.com/ptbr/docs/intro)
+- [Yup](https://www.npmjs.com/package/yup)
+- [React Hook Form](https://react-hook-form.com/)
+- [React Nativation](https://reactnavigation.org/)
 
 ## **🔖 Layout**
 
